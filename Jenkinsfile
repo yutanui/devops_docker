@@ -2,7 +2,7 @@ pipeline {
     agent none
     environment {
         imageName = 'yutanui/my_web_ex'
-        port = 80
+        port = 9090
     }
     
     stages {
@@ -24,7 +24,14 @@ pipeline {
        stage('Deploy') { 
           agent {label 'mgr1'}
           steps {
-           sh "echo h"
+            script {
+                  try {
+                    sh "docker service update --image ${env.imageName} my_web_ex"
+                    sh "echo update service"
+                  } catch (e){
+                    sh "docker service create --name my_web_ex -p ${env.port}:80 ${env.imageName}"
+                    sh "echo create service"
+                  }
           }
        }
     }
