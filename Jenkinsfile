@@ -32,6 +32,7 @@ pipeline {
                     sh "docker service create --name my_web_ex -p ${env.port}:80 ${env.imageName}"
                     sh "echo create service"
                   }
+            }
           }
        }
     }
